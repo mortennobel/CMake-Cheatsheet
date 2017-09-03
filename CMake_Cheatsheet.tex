@@ -92,13 +92,13 @@ pdfkeywords={Cross-platform development, Open Source, CMake}
 
 This cheatsheet will give you an idea how CMake works and how it can be used to configure software projects.
 
-The document is available at: \url{https://github.com/mortennobel/CMake-Cheatsheet}. 
+The document is available at  \url{https://github.com/mortennobel/CMake-Cheatsheet}. 
 
 \sectiontitle{CMake - Creating a simple C++ project}
 			 
-CMake is a tool that allows users to configure how a source code project should be built on a specific platform. 
+CMake is a tool for configuring how a cross-platform source code project should be built on a given platform. 
 
-A small project could be organized like this (Example1): 
+A small project could be organized like this: 
 
 \vspace{\baselineskip} % Whitespace before the next section
 
@@ -115,22 +115,22 @@ src/foo.hpp
 
 This project contains two source files located in the src directory and one header file in the include directory in the same directory.
 
-When running CMake on this project you are asked to for a binary directory. It is best practise to create a new directory, since this directory will contain all files related to building the project. If something goes wrong, you can delete the folder and start over.
+When running CMake on this project you are asked to for a binary directory. It is best practice to create a new directory since this directory will contain all files related to building the project. If something goes wrong, you can delete the folder and start over.
 
-Running CMake will not create the final executable, but instead it will generate project files for Visual Studio, XCode or makefiles. Use these tools to build the project.
+Running CMake will not create the final executable, but instead, it will generate project files for Visual Studio, XCode or makefiles. Use these tools to build the project.
 
 \sectiontitle{Understanding CMakeLists.txt}
 
-Creating project files using CMake requires a \codeword{CMakeLists.txt} file, which describes how the project is structured and how it should be build.
+Creating project files using CMake requires a \codeword{CMakeLists.txt} file, which describes how the project is structured and how it should be built.
 
 For example 1 the file looks like this: 
 
 \lstinputlisting[language=bash]{examples/example1/CMakeLists.txt}
 
-First the minimum version of CMake is defined. Then the project name is defined using the command \codeword{project()}. A project can contain multiple targets (either executables or libraries). This project defines a single executable target called \codeword{Hello}, which is created by compiling and linking the two source files \codeword{main.cpp} and \codeword{foo.cpp} files.
+First, the minimum version of CMake is defined. Then the project name is defined using the command \codeword{project()}. A project can contain multiple targets (either executables or libraries). This project defines a single executable target called \codeword{Hello}, which is created by compiling and linking the two source files \codeword{main.cpp} and \codeword{foo.cpp} files.
 
 When the two source files are compiled the compiler will search for the header file \codeword{foo.h} since both source files depend on this using a \codeword{#include "foo.hpp"}. Since the file is located in the same located as the source file, the compiler will not have any problems finding the file.
-			
+
 \sectiontitle{The CMake Scripting Language}
 
 The CMakeLists.txt describes the build process using a command based programming language. The commands are case insensitive and take a list of arguments.
@@ -150,7 +150,7 @@ CMake script also has variables. Variables can either be defined by CMake or can
 
 All variable values are a text string. Text strings can be evaluated as boolean expressions (e.g. when used in \codeword{IF()} and \codeword{WHILE()}). The values "FALSE", "OFF", "NO", or any string ending in "-NOTFOUND" evaluates be false - everything else to true.
 
-Text strings can represent multiple values as a list by separating entities using semi-colon.
+Text strings can represent multiple values as a list by separating entities using a semicolon.
 
 \lstinputlisting[language=bash]{examples/example3/CMakeLists.txt}
 
@@ -160,7 +160,7 @@ Lists can be iterated using the command \codeword{FOREACH (var val)}:
 			
 \sectiontitle{Exposing compile options}
 			
-CMake allows the end user (who runs CMake) to modify some values of some variables.  This is usually used to defined properties of the build such as locations of files, machine architecture and string values.
+CMake allows the end user (who runs CMake) to modify some values of some variables.  This is usually used to defined properties of the build such as locations of files, machine architecture, and string values.
 
 The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} set the variable to the default value - but allows the value to be changed by the cmake user when configuring the build. The type should be one of the following:
 
@@ -172,11 +172,11 @@ The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} set the 
 \item INTERNAL = No GUI entry (used for persistent variables).
 \end{itemize}
 
-In the following example the user can configure if "Hello" or an alternative string should be printed based on the configuration variables hello and other\_msg.
+In the following example, the user can configure if "Hello" or an alternative string should be printed based on the configuration variables hello and other\_msg.
  
 \lstinputlisting[language=bash]{examples/example5/CMakeLists.txt}
 
-During configuration of the project, the CMake user get prompted with the exposed options.
+During configuration of the project, the CMake user gets prompted with the exposed options.
 
 \includegraphics[width=\columnwidth]{variable-options}
 
