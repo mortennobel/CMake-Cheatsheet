@@ -1,0 +1,3 @@
+/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example7/build/CMakeFiles/Hello.dir
+/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example7/build/CMakeFiles/ALL_BUILD.dir
+/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example7/build/CMakeFiles/ZERO_CHECK.dir

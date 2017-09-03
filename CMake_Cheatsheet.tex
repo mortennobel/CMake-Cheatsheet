@@ -1,0 +1,282 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CMake Cheatsheet
+% By Morten Nobel-Jørgensen (mnob@itu.dk) (01/09/2017)
+%
+% MIT License
+%
+% 
+%
+% LaTeX Template
+% Version 1.0 (12/12/15)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Michael Müller (https://github.com/cmichi/latex-template-collection) with
+% extensive modifications by Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% The MIT License (see included LICENSE file)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,a4paper,landscape]{scrartcl} % 11pt font size
+
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+
+\usepackage[margin=30pt, landscape]{geometry} % Page margins and orientation
+
+\usepackage{graphicx} % Required for including images
+\usepackage{listings}
+\usepackage{multicol}
+
+\usepackage{color} % Required for color customization
+\definecolor{mygray}{gray}{.75} % Custom color
+
+\usepackage{url} % Required for the \url command to easily display URLs
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{xparse}
+\usepackage[ % This block contains information used to annotate the PDF
+colorlinks=false, 
+pdftitle={CMake Cheatsheet}, 
+pdfauthor={Morten Nobel-Jørgensen}, 
+pdfsubject={A gentle introduction to CMake}, 
+pdfkeywords={Cross-platform development, Open Source, CMake}
+]{hyperref}
+
+\lstset{frame=lrbt,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+\setlength{\unitlength}{1mm} % Set the length that numerical units are measured in
+\setlength{\parindent}{0pt} % Stop paragraph indentation
+
+\renewcommand{\dots}{\ \dotfill{}\ } % Fills in the right amount of dots
+
+\newcommand{\command}[2]{#1~\dotfill{}~#2\\} % Custom command for adding a shorcut
+
+\newcommand{\sectiontitle}[1]{\paragraph{#1} \ \\} % Custom command for subsection titles
+
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{#1}%
+}
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+
+
+\section*{CMake Cheatsheet -- A gentle introduction to CMake} % Title
+
+
+
+%----------------------------------------------------------------------------------------
+%	FIRST COLUMN SPECIFICATION
+%----------------------------------------------------------------------------------------
+\setlength{\columnsep}{1.5cm}
+\begin{multicols}{2}
+
+%----------------------------------------------------------------------------------------
+%	HEADING ONE
+%----------------------------------------------------------------------------------------
+
+This cheatsheet will give you an idea how CMake works and how it can be used to configure software projects.
+
+\sectiontitle{CMake - Creating a simple C++ project}
+			 
+CMake is a tool that allows users to configure how a source code project should be built on a specific platform. 
+
+A small project could be organized like this (Example1): 
+
+\vspace{\baselineskip} % Whitespace before the next section
+
+\noindent\fbox{%
+    \parbox{\columnwidth}{%
+CMakeLists.txt \\
+src/main.cpp \\
+src/foo.cpp\\
+src/foo.hpp
+}%
+}
+
+\vspace{\baselineskip} % Whitespace before the next section
+
+This project contains two source files located in the src directory and one header file in the include directory in the same directory.
+
+When running CMake on this project you are asked to for a binary directory. It is best practise to create a new directory, since this directory will contain all files related to building the project. If something goes wrong, you can delete the folder and start over.
+
+Running CMake will not create the final executable, but instead it will generate project files for Visual Studio, XCode or makefiles. Use these tools to build the project.
+
+\sectiontitle{Understanding CMakeLists.txt}
+
+Creating project files using CMake requires a \codeword{CMakeLists.txt} file, which describes how the project is structured and how it should be build.
+
+For example 1 the file looks like this: 
+
+\lstinputlisting[language=bash]{examples/example1/CMakeLists.txt}
+
+First the minimum version of CMake is defined. Then the project name is defined using the command \codeword{project()}. A project can contain multiple targets (either executables or libraries). This project defines a single executable target called \codeword{Hello}, which is created by compiling and linking the two source files \codeword{main.cpp} and \codeword{foo.cpp} files.
+
+When the two source files are compiled the compiler will search for the header file \codeword{foo.h} since both source files depend on this using a \codeword{#include "foo.hpp"}. Since the file is located in the same located as the source file, the compiler will not have any problems finding the file.
+			
+\sectiontitle{The CMake Scripting Language}
+
+The CMakeLists.txt describes the build process using a command based programming language. The commands are case insensitive and take a list of arguments.
+
+\begin{lstlisting}[language=bash]
+# This is a comment.
+COMMAND( arguments go here )
+ANOTHER_COMMAND() # this command has no arguments
+YET_ANOTHER_COMMAND( these
+  arguments are spread         # another comment 
+  over several lines )
+\end{lstlisting}
+
+CMake script also has variables. Variables can either be defined by CMake or can be defined in the CMake script.  The command \codeword{set(parameter value)} set a given parameter to a value. The command \codeword{message(value)} print out the value to the console. To get the value of a variable use \codeword{${varname}}, which substitutes the variable name with its value.
+
+\lstinputlisting[language=bash]{examples/example2/CMakeLists.txt}
+
+All variable values are a text string. Text strings can be evaluated as boolean expressions (e.g. when used in \codeword{IF()} and \codeword{WHILE()}). The values "FALSE", "OFF", "NO", or any string ending in "-NOTFOUND" evaluates be false - everything else to true.
+
+Text strings can represent multiple values as a list by separating entities using semi-colon.
+
+\lstinputlisting[language=bash]{examples/example3/CMakeLists.txt}
+
+Lists can be iterated using the command \codeword{FOREACH (var val)}:
+
+\lstinputlisting[language=bash]{examples/example4/CMakeLists.txt}
+			
+\sectiontitle{Exposing compile options}
+			
+CMake allows the end user (who runs CMake) to modify some values of some variables.  This is usually used to defined properties of the build such as locations of files, machine architecture and string values.
+
+The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} set the variable to the default value - but allows the value to be changed by the cmake user when configuring the build. The type should be one of the following:
+
+\begin{itemize}  
+\item FILEPATH = File chooser dialog.
+\item PATH     = Directory chooser dialog.
+\item STRING   = Arbitrary string.
+\item BOOL     = Boolean ON/OFF checkbox.
+\item INTERNAL = No GUI entry (used for persistent variables).
+\end{itemize}
+
+In the following example the user can configure if "Hello" or an alternative string should be printed based on the configuration variables hello and other\_msg.
+ 
+\lstinputlisting[language=bash]{examples/example5/CMakeLists.txt}
+
+During configuration of the project, the CMake user get prompted with the exposed options.
+
+\includegraphics[width=\columnwidth]{variable-options}
+
+The values that the CMake user enters will be saved in the text file \codeword{CMakeCache.txt} as key-value pairs:
+
+\begin{lstlisting}[language=bash]
+// ....
+//Print hello
+hello:BOOL=OFF
+
+//Not hello value
+other_msg:STRING=Guten tag
+// ....
+\end{lstlisting}
+
+\sectiontitle{Complex projects}
+
+Some project both contains multiple executables and multiple libraries. This is project structure for instance when having both unit tests and programs. It is common to separate these sub projects into subfolders. Example:
+
+\vspace{\baselineskip} % Whitespace before the next section
+\noindent\fbox{%
+    \parbox{\columnwidth}{%
+CMakeLists.txt \\
+somelib/CMakeLists.txt \\
+somelib/foo.hpp \\
+somelib/foo.cpp \\
+someexe/CMakeLists.txt\\
+someexe/main.cpp
+}%
+}
+
+\vspace{\baselineskip} % Whitespace before the next section
+
+The main \codeword{CMakeLists.txt} contains the basic project settings but then includes the sub projects:
+
+\lstinputlisting[language=bash]{examples/example6/CMakeLists.txt}
+
+First the library Foo is compiled from the source in the  \codeword{somelib} directory:
+
+\lstinputlisting[language=bash]{examples/example6/somelib/CMakeLists.txt}
+
+Finally, the executable Hello is compiled and linked to the Foo library. Since the main.cpp references to header file Foo.hpp the somelib directory is added to the header search path:
+
+\lstinputlisting[language=bash]{examples/example6/someexe/CMakeLists.txt}
+
+\sectiontitle{Runtime resources}
+
+Often runtime resources (such as DLLs, game-assets and text files) are read relative to the executable. One solution is to copy resources into the same directory as the executable. Example:
+
+\vspace{\baselineskip} % Whitespace before the next section
+\noindent\fbox{%
+    \parbox{\columnwidth}{%
+CMakeLists.txt \\
+someexe/main.cpp \\
+someexe/res.txt
+}%
+}
+
+In this project the source files assumes that the resource is located in the same directory as the executable:
+
+\lstinputlisting[language=c++]{examples/example7/someexe/main.cpp}
+
+The CMakeLists.txt make sure to copy the file. 
+
+\lstinputlisting[language=bash]{examples/example7/CMakeLists.txt}
+
+Note: One problem with this approach is if you modify the original resources, then you need to run CMake again.
+
+\vspace{\baselineskip} % Whitespace before the next section
+
+%----------------------------------------------------------------------------------------
+%	LINKS AND INFORMATION
+%----------------------------------------------------------------------------------------
+
+\sectiontitle{Links and information}
+
+\url{https://cmake.org/Wiki/CMake/Language_Syntax}
+
+\url{https://cmake.org/cmake/help/v3.0/command/set.html}
+
+%----------------------------------------------------------------------------------------
+%	FOOTNOTE
+%----------------------------------------------------------------------------------------
+
+\vspace{\baselineskip}
+\linethickness{0.5mm} % Thickness of the footer line
+{\color{mygray}\line(1,0){30}} % Print the line with a custom color
+
+\footnotesize{
+Created by Morten Nobel-Jørgensen, mnob@itu.dk, ITU, 2017\\ 
+
+Released under the MIT license. \\
+
+Latex template by John Smith, 2015\\ 
+\url{http://johnsmith.com/}\\
+				
+Released under the MIT license.
+}
+
+%----------------------------------------------------------------------------------------
+\end{multicols}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
