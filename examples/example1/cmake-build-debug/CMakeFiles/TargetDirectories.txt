@@ -1,3 +1,0 @@
-/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/mnob/ownCloud/Documents/CMake cheatsheet/examples/example1/cmake-build-debug/CMakeFiles/Hello.dir

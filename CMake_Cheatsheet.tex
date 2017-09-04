@@ -92,7 +92,7 @@ pdfkeywords={Cross-platform development, Open Source, CMake}
 
 This cheatsheet will give you an idea how CMake works and how it can be used to configure software projects.
 
-The document is available at  \url{https://github.com/mortennobel/CMake-Cheatsheet}. 
+The document and the CMake examples are available at  \url{https://github.com/mortennobel/CMake-Cheatsheet}. 
 
 \sectiontitle{CMake - Creating a simple C++ project}
 			 
@@ -218,7 +218,7 @@ First the library Foo is compiled from the source in the  \codeword{somelib} dir
 
 \lstinputlisting[language=bash]{examples/example6/somelib/CMakeLists.txt}
 
-Finally, the executable Hello is compiled and linked to the Foo library. Since the main.cpp references to header file Foo.hpp the somelib directory is added to the header search path:
+Finally, the executable Hello is compiled and linked to the Foo library - note that the target name is used here - not the actual path. Since the main.cpp references to header file Foo.hpp the somelib directory is added to the header search path:
 
 \lstinputlisting[language=bash]{examples/example6/someexe/CMakeLists.txt}
 
@@ -244,6 +244,35 @@ The CMakeLists.txt make sure to copy the file.
 \lstinputlisting[language=bash]{examples/example7/CMakeLists.txt}
 
 Note: One problem with this approach is if you modify the original resources, then you need to run CMake again.
+
+\sectiontitle{External libraries}
+
+External libraries basically come in two flavors; dynamically linked libraries (DLLs) which are linked with the binary at runtime and statical linked libraries which are linked at compile time.
+
+Static libraries have the most simple setup. To use one, the compiler needs to know the location of where to locate the header files and the linker need to know the location of the actual library. Unless the external libraries are distributed along with the project it is usually not possible to know their location - for this reason, it is common to use cached variables, where the CMake user can change the location. Static libraries have the file ending .lib on Windows and .a on most other platforms. 
+
+\lstinputlisting[language=bash]{examples/example8/CMakeLists.txt}
+
+Dynamically linked libraries work similar to statical linked libraries. On Windows, it is still needed to link to a library at compile time, but the actual linking to the DLL happens at compile time. The executable file needs to be able to find the DLL file in the runtime linkers  search path. If the DLL is not a system library, an easy solution is to copy the DLL next to the executable. Working with DLL often requires platform specific actions, which CMake support using the built-in variables \codeword{WIN32}, \codeword{APPLE}, \codeword{UNIX}. 
+
+\lstinputlisting[language=bash]{examples/example9/CMakeLists.txt}
+
+\sectiontitle{Automatically locating libraries}
+
+CMake also contains a feature to automatically find libraries (based on a number of suggested locations) using the command \codeword{find_package()}. However, this feature works best on macOS and Linux. 
+
+\url{https://cmake.org/Wiki/CMake:How_To_Find_Libraries}.
+
+\sectiontitle{C++ version}
+
+The C++ version can be set using the commands:
+
+\begin{lstlisting}[language=bash]
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+\end{lstlisting}
+
 
 \vspace{\baselineskip} % Whitespace before the next section
 
