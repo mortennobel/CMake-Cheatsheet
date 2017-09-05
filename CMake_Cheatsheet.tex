@@ -222,6 +222,12 @@ Finally, the executable Hello is compiled and linked to the Foo library - note t
 
 \lstinputlisting[language=bash]{examples/example6/someexe/CMakeLists.txt}
 
+\sectiontitle{Searching for source files}
+
+Use the \codeword{find(GLOB varname patterns)} to automatically search for files within a directory given one or more search patterns. Note that in the example below, both source files and header files are added to the project. This is not needed for compiling the project, but it is convenient when using and IDE, since this also adds the header files to the project.
+
+\lstinputlisting[language=bash]{examples/example6-find/CMakeLists.txt}
+
 \sectiontitle{Runtime resources}
 
 Often runtime resources (such as DLLs, game-assets and text files) are read relative to the executable. One solution is to copy resources into the same directory as the executable. Example:
@@ -273,6 +279,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 \end{lstlisting}
 
+\sectiontitle{Defining preprocessor symbols}
+
+Use the \codeword{add_definitions()} to add preprocessor symbols to the project.
+
+\begin{lstlisting}[language=bash]
+# ...
+add_definitions(-DFOO=\"XXX\")
+add_definitions(-DBAR)
+\end{lstlisting}
+
+This will create the symbols \codeword{FOO} and \codeword{BAR}, which can be used in the source code:
+
+\begin{lstlisting}[language=c++]
+#include <iostream>
+
+using namespace std;
+
+int main(){
+#ifdef BAR
+    cout << "Bar"<< endl;
+#endif
+    cout << "Hello world "<<FOO << endl;
+
+    return 0;
+}
+\end{lstlisting}
 
 \vspace{\baselineskip} % Whitespace before the next section
 
