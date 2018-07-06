@@ -194,7 +194,7 @@ other_msg:STRING=Guten tag
 
 \sectiontitle{Complex projects}
 
-Some project both contains multiple executables and multiple libraries. This is project structure for instance when having both unit tests and programs. It is common to separate these sub projects into subfolders. Example:
+Some project both contains multiple executables and multiple libraries. For instance when having both unit tests and programs. It is common to separate these subprojects into subfolders. Example:
 
 \vspace{\baselineskip} % Whitespace before the next section
 \noindent\fbox{%
@@ -210,7 +210,7 @@ someexe/main.cpp
 
 \vspace{\baselineskip} % Whitespace before the next section
 
-The main \codeword{CMakeLists.txt} contains the basic project settings but then includes the sub projects:
+The main \codeword{CMakeLists.txt} contains the basic project settings but then includes the subprojects:
 
 \lstinputlisting[language=bash]{examples/example6/CMakeLists.txt}
 
@@ -224,7 +224,7 @@ Finally, the executable Hello is compiled and linked to the Foo library - note t
 
 \sectiontitle{Searching for source files}
 
-Use the \codeword{find(GLOB varname patterns)} to automatically search for files within a directory given one or more search patterns. Note that in the example below, both source files and header files are added to the project. This is not needed for compiling the project, but it is convenient when using and IDE, since this also adds the header files to the project.
+Use the \codeword{find(GLOB varname patterns)} to automatically search for files within a directory given one or more search patterns. Note that in the example below, both source files and header files are added to the project. This is not needed for compiling the project, but it is convenient when using an IDE since this also adds the header files to the project.
 
 \lstinputlisting[language=bash]{examples/example6-find/CMakeLists.txt}
 
@@ -241,7 +241,7 @@ someexe/res.txt
 }%
 }
 
-In this project the source files assumes that the resource is located in the same directory as the executable:
+In this project, the source files assume that the resource is located in the same directory as the executable:
 
 \lstinputlisting[language=c++]{examples/example7/someexe/main.cpp}
 
@@ -259,7 +259,7 @@ Static libraries have the most simple setup. To use one, the compiler needs to k
 
 \lstinputlisting[language=bash]{examples/example8/CMakeLists.txt}
 
-Dynamically linked libraries work similar to statical linked libraries. On Windows, it is still needed to link to a library at compile time, but the actual linking to the DLL happens at compile time. The executable file needs to be able to find the DLL file in the runtime linkers  search path. If the DLL is not a system library, an easy solution is to copy the DLL next to the executable. Working with DLL often requires platform specific actions, which CMake support using the built-in variables \codeword{WIN32}, \codeword{APPLE}, \codeword{UNIX}. 
+Dynamically linked libraries work similar to statical linked libraries. On Windows, it is still needed to link to a library at compile time, but the actual linking to the DLL happens at compile time. The executable file needs to be able to find the DLL file in the runtime linkers search path. If the DLL is not a system library, an easy solution is to copy the DLL next to the executable. Working with DLL often requires platform specific actions, which CMake support using the built-in variables \codeword{WIN32}, \codeword{APPLE}, \codeword{UNIX}.
 
 \lstinputlisting[language=bash]{examples/example9/CMakeLists.txt}
 
