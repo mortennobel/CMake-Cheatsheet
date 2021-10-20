@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.9)
 
 SET( x 3 2) # x = "3;2"
 SET( y hello world !) # y = "hello;world;!"
-SET( z "hello world!" ) # y = "hello world!"
-MESSAGE( ${x} ) # prints "xy"
+SET( z "hello world!" ) # z = "hello world!"
+MESSAGE( ${x} ) # prints "32"
 MESSAGE( "y = ${y} z = ${z}" ) 
 # prints y = hello;world;! z = hello world!
